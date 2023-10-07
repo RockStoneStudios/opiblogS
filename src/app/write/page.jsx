@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import styles from "./writePage.module.css";
 import { useEffect, useState } from "react";
-import "react-quill/dist/quill.bubble.css";
+// import "react-quill/dist/quill.bubble.css";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {
@@ -13,7 +13,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { app } from "@/utils/firebase";
-import ReactQuill from "react-quill";
+// import ReactQuill from "react-quill";
 
 const WritePage = () => {
   const { status } = useSession();
@@ -78,14 +78,14 @@ const WritePage = () => {
       .replace(/^-+|-+$/g, "");
 
   const handleSubmit = async () => {
-    const res = await fetch("http://localhost:3000/api/posts", {
+    const res = await fetch("/api/posts", {
       method: "POST",
       body: JSON.stringify({
         title,
         desc: value,
         img: media,
         slug: slugify(title),
-        catSlug: catSlug || "Cultura", //If not selected, choose the general category
+        catSlug: catSlug || "style", //If not selected, choose the general category
       }),
     });
 
@@ -104,14 +104,12 @@ const WritePage = () => {
         onChange={(e) => setTitle(e.target.value)}
       />
       <select className={styles.select} onChange={(e) => setCatSlug(e.target.value)}>
-        <option value="Cultura">Cultura</option>
-        <option value="Gastronomia">Gastronomia</option>
-        <option value="Deporte">Deporte</option>
-        <option value="Viaje">Viajes</option>
-        <option value="Deporte">Deporte</option>
-        <option value="Tecnologia">Tecnologia</option>
-        <option value="Emprendimiento">Emprendimiento</option>
-
+        <option value="style">style</option>
+        <option value="fashion">fashion</option>
+        <option value="food">food</option>
+        <option value="culture">culture</option>
+        <option value="travel">travel</option>
+        <option value="coding">coding</option>
       </select>
       <div className={styles.editor}>
         <button className={styles.button} onClick={() => setOpen(!open)}>
@@ -138,12 +136,13 @@ const WritePage = () => {
             </button>
           </div>
         )}
-        <ReactQuill
+        <textarea
           className={styles.textArea}
-          theme="bubble"
+          rows={12}
+          cols={6}
           value={value}
-          onChange={setValue}
-          placeholder="Cuentame tu Historia . . ."
+          onChange={(e)=> setValue(e.target.value)}
+          placeholder="Cuentame tu historia ..."
         />
       </div>
       <button className={styles.publish} onClick={handleSubmit}>
